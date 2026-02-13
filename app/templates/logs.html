@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Logs</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="nav">
+  <a href="/">Dashboard</a> |
+  <a href="/mailboxes">Mailboxes</a> |
+  <a href="/settings">System Settings</a> |
+  <a href="/attachments">Attachments</a> |
+  <a href="/logs">Logs</a>
+</div>
+
+<h1>Logs</h1>
+
+<p>
+  Order:
+  {% if order == 'new' %}
+    <strong>Newest first</strong> |
+    <a href="/logs?order=old">Oldest first</a>
+  {% else %}
+    <a href="/logs?order=new">Newest first</a> |
+    <strong>Oldest first</strong>
+  {% endif %}
+</p>
+
+<pre>{{ logs }}</pre>
+
+</body>
+</html>

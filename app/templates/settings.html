@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>System Settings</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="nav">
+  <a href="/">Dashboard</a> |
+  <a href="/mailboxes">Mailboxes</a> |
+  <a href="/settings">System Settings</a> |
+  <a href="/attachments">Attachments</a> |
+  <a href="/logs">Logs</a>
+</div>
+
+<h1>System Settings</h1>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flash">
+    {% for m in messages %}
+      <li>{{ m }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<form method="post">
+  <fieldset>
+    <legend>Polling</legend>
+    <label>Poll interval (seconds)
+      <input name="poll_interval_seconds" value="{{ cfg.system.poll_interval_seconds }}">
+    </label>
+    <label>Attachment retention (months)
+      <input name="attachment_retention_months" value="{{ cfg.system.attachment_retention_months }}">
+    </label>
+    <label>Alert after X hours without polling
+      <input name="alert_hours" value="{{ cfg.system.get('alert_hours', 0) }}">
+    </label>
+    <label>Email to notify
+      <input name="alert_email" value="{{ cfg.system.get('alert_email', '') }}">
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>SMTP Relay</legend>
+    <label>Host
+      <input name="smtp_host" value="{{ cfg.system.smtp.host }}">
+    </label>
+    <label>Port
+      <input name="smtp_port" value="{{ cfg.system.smtp.port }}">
+    </label>
+    <label>STARTTLS
+      <select name="smtp_starttls">
+        <option value="true" {% if cfg.system.smtp.starttls %}selected{% endif %}>true</option>
+        <option value="false" {% if not cfg.system.smtp.starttls %}selected{% endif %}>false</option>
+      </select>
+    </label>
+    <label>User
+      <input name="smtp_user" value="{{ cfg.system.smtp.user }}">
+    </label>
+    <label>Pass
+      <input name="smtp_pass" type="password" value="{{ cfg.system.smtp.pass }}">
+    </label>
+    <label>From
+      <input name="smtp_from" value="{{ cfg.system.smtp.from }}">
+    </label>
+    <label>HELO
+      <input name="smtp_helo" value="{{ cfg.system.smtp.helo }}">
+    </label>
+  </fieldset>
+
+  <button type="submit">Save</button>
+</form>
+
+<h3>SMTP Test</h3>
+<form method="post" action="/smtp-test">
+  <label>Send test email to:
+    <input name="dest" value="{{ cfg.system.smtp.from }}">
+  </label>
+  <button type="submit">Send Test Email</button>
+</form>
+
+</body>
+</html>

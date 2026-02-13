@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Voicemail Forwarder</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="nav">
+  <a href="/">Dashboard</a> |
+  <a href="/mailboxes">Mailboxes</a> |
+  <a href="/settings">System Settings</a> |
+  <a href="/attachments">Attachments</a> |
+  <a href="/logs">Logs</a>
+</div>
+
+<h1>Dashboard</h1>
+
+<form action="/poll-now" method="post" style="margin-bottom:10px;">
+  <button type="submit">Poll Now</button>
+</form>
+
+<p>
+  Poll interval: {{ cfg.system.poll_interval_seconds }} s |
+  Retention: {{ cfg.system.attachment_retention_months }} months |
+  SMTP: {{ cfg.system.smtp.host }}:{{ cfg.system.smtp.port }}
+</p>
+
+<p>
+  Log order:
+  {% if order == 'new' %}
+    <strong>Newest first</strong> |
+    <a href="/?order=old">Oldest first</a>
+  {% else %}
+    <a href="/?order=new">Newest first</a> |
+    <strong>Oldest first</strong>
+  {% endif %}
+</p>
+
+<h2>Recent activity</h2>
+<pre>{{ logs }}</pre>
+
+</body>
+</html>

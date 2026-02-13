@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Voicemail Attachments</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+</head>
+<body>
+<div class="nav">
+  <a href="/">Dashboard</a> |
+  <a href="/mailboxes">Mailboxes</a> |
+  <a href="/settings">System Settings</a> |
+  <a href="/attachments">Attachments</a> |
+  <a href="/logs">Logs</a>
+</div>
+
+<h1>Voicemail Attachments (wav only)</h1>
+
+<table id="atts" class="display">
+  <thead>
+    <tr>
+      <th>Play</th>
+      <th>Filename</th>
+      <th>Mailbox</th>
+      <th>Subject</th>
+      <th>Date/Time</th>
+      <th>Download</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for fn, mailbox, subject, ts in rows %}
+    <tr>
+      <td>
+        <audio controls preload="none" style="width:220px">
+          <source src="/attachments/{{ fn }}" type="audio/wav">
+        </audio>
+      </td>
+      <td>{{ fn }}</td>
+      <td>{{ mailbox }}</td>
+      <td title="{{ subject }}">{{ subject }}</td>
+      <td>{{ ts }}</td>
+      <td><a href="/attachments/{{ fn }}?download=1">Download</a></td>
+      <td>
+        <form action="/attachments/delete/{{ fn }}" method="post" onsubmit="return confirm('Delete this attachment?');">
+          <button type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<script>
+$(document).ready(function(){
+  new DataTable('#atts');
+});
+</script>
+
+</body>
+</html>

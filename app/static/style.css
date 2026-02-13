@@ -1,0 +1,12 @@
+body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:20px;line-height:1.4}
+.nav a{margin-right:12px}
+table{border-collapse:collapse;width:100%;margin:10px 0}
+td,th{border:1px solid #ccc;padding:6px 8px;text-align:left;vertical-align:top}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:10px 0}
+label{display:flex;flex-direction:column;font-weight:600}
+input,select{padding:6px}
+button{padding:8px 12px;cursor:pointer}
+.flash{color:#0a0;margin:8px 0}
+.modal{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center}
+.modal-content{background:#fff;padding:16px;border-radius:8px;min-width:280px}
+.modal-actions{margin-top:10px;display:flex;gap:10px;justify-content:flex-end}
