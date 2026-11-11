@@ -1,0 +1,9 @@
+.git
+data
+logs
+__pycache__
+**/__pycache__
+*.pyc
+.venv
+venv
+security-evidence

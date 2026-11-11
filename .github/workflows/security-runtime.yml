@@ -1,0 +1,28 @@
+name: Runtime security checks
+on:
+  pull_request:
+  push:
+    branches: [master]
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -r requirements.lock
+      - run: pip check
+      - run: python -m unittest discover -s tests -v
+      - run: git diff --check
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t voicemail-forwarder:test .
+      - run: docker run --rm --network none --memory 512m --cpus 1 -e PYTHONPATH=/app -e PYTHONDONTWRITEBYTECODE=1 -v "$PWD/tests:/tests:ro" --entrypoint python voicemail-forwarder:test -m unittest discover -s /tests -v

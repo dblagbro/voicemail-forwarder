@@ -104,6 +104,18 @@ def create_app():
         flash("Mailbox removed")
         return redirect(url_for("mailboxes"))
 
+    @app.route("/mailboxes/test/<name>", methods=["POST"])
+    def test_mailbox(name):
+        res = core.pop3_test_by_name(name)
+        if res is None:
+            return {"ok": False, "mailbox": name, "stage": "lookup",
+                    "error": "no such mailbox", "steps": []}, 404
+        return res
+
+    @app.route("/mailboxes/test-all", methods=["POST"])
+    def test_all_mailboxes():
+        return {"results": core.pop3_test_all()}
+
     @app.route("/mailboxes/password/<name>", methods=["POST"])
     def change_password(name):
         newpw = request.form.get("new_password", "")
@@ -122,8 +134,27 @@ def create_app():
     def raw_logs():
         order = request.args.get("order", "new")
         newest_first = (order != "old")
-        logs = core.get_recent_log(2000, newest_first=newest_first)
-        return render_template("logs.html", logs=logs, order=order)
+        f = {
+            "q": request.args.get("q", ""),
+            "level": request.args.get("level", ""),
+            "event": request.args.get("event", ""),
+            "mailbox": request.args.get("mailbox", ""),
+            "since": request.args.get("since", ""),
+            "until": request.args.get("until", ""),
+            "limit": request.args.get("limit", "2000"),
+        }
+        logs, meta = core.search_log(
+            q=f["q"], level=f["level"], event=f["event"], mailbox=f["mailbox"],
+            since=f["since"], until=f["until"], max_lines=f["limit"],
+            newest_first=newest_first,
+        )
+        cfg = core.load_cfg()
+        mailbox_names = [m.get("name", "") for m in cfg.get("mailboxes", []) if m.get("name")]
+        return render_template(
+            "logs.html", logs=logs, order=order, meta=meta, f=f,
+            levels=core.LOG_LEVELS, events=core.LOG_EVENTS,
+            mailbox_names=mailbox_names,
+        )
 
     @app.route("/attachments")
     def list_attachments():
@@ -132,8 +163,8 @@ def create_app():
 
     @app.route("/attachments/<path:fn>")
     def fetch_attachment(fn):
-        path = os.path.join(core.ATT_DIR, fn)
-        if not os.path.isfile(path):
+        path = core.safe_attachment_path(fn)
+        if path is None or not os.path.isfile(path):
             return "Not found", 404
         if request.args.get("download") == "1":
             return send_file(path, as_attachment=True, download_name=os.path.basename(path))

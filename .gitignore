@@ -23,3 +23,5 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
+
+security-evidence/
