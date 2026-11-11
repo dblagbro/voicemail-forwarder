@@ -1,0 +1,91 @@
+{
+  "utc": "2026-11-11T05:44:37.915642+00:00",
+  "image": "sha256:2642c1938ba2b5e7f6628105f452b294dc09b94efa9e7f79ed5069c0dca9453f",
+  "network": "none",
+  "published_ports": false,
+  "production_touched": false,
+  "synthetic_data_only": true,
+  "cases": [
+    {
+      "phase": "normal",
+      "expected_controller_failure": false,
+      "unit_returncode": 0,
+      "original_resumed": true,
+      "configuration_restored": true,
+      "sqlite_integrity": true,
+      "http_200": true,
+      "container_id": "afca32d1bb0e0999889a7bb7007871e20523c0b8f0797ae12d3d4107345c587b"
+    },
+    {
+      "phase": "pause_intent",
+      "expected_controller_failure": true,
+      "unit_returncode": 1,
+      "original_resumed": true,
+      "configuration_restored": true,
+      "sqlite_integrity": true,
+      "http_200": true,
+      "container_id": "8abb9196819b9d7570b0f3611fee39470634f2dea50ff8844116d0d4f60cc98b"
+    },
+    {
+      "phase": "paused",
+      "expected_controller_failure": true,
+      "unit_returncode": 1,
+      "original_resumed": true,
+      "configuration_restored": true,
+      "sqlite_integrity": true,
+      "http_200": true,
+      "container_id": "fe22f47915fe5b7c186330afc086449d545343b1c64973ffdaeea679c21bb612"
+    },
+    {
+      "phase": "idle_verified",
+      "expected_controller_failure": true,
+      "unit_returncode": 1,
+      "original_resumed": true,
+      "configuration_restored": true,
+      "sqlite_integrity": true,
+      "http_200": true,
+      "container_id": "b47109d286009a4ecc868f6a33874f1b964fcf76a415c7e57bb6ad61944c5640"
+    },
+    {
+      "phase": "snapshot_intent",
+      "expected_controller_failure": true,
+      "unit_returncode": 1,
+      "original_resumed": true,
+      "configuration_restored": true,
+      "sqlite_integrity": true,
+      "http_200": true,
+      "container_id": "891bab115b730581ab941c2f75f90b993e229846801777b19bda715690d82fdd"
+    },
+    {
+      "phase": "local_complete",
+      "expected_controller_failure": true,
+      "unit_returncode": 1,
+      "original_resumed": true,
+      "configuration_restored": true,
+      "sqlite_integrity": true,
+      "http_200": true,
+      "container_id": "e4115f8f1e9dbc5387f89931f078d7ef082062a48f5cc11cdf0145948c56b9be"
+    },
+    {
+      "phase": "san_complete",
+      "expected_controller_failure": true,
+      "unit_returncode": 1,
+      "original_resumed": true,
+      "configuration_restored": true,
+      "sqlite_integrity": true,
+      "http_200": true,
+      "container_id": "89def0702c647e10c48347ad9d2076356c0154eadbb93ee0497ffd9dfae370e0"
+    },
+    {
+      "phase": "backup_complete",
+      "expected_controller_failure": true,
+      "unit_returncode": 1,
+      "original_resumed": true,
+      "configuration_restored": true,
+      "sqlite_integrity": true,
+      "http_200": true,
+      "container_id": "823291c039ff72eb518b6b1478b20a763d26a7e088b7af82f9d5bf328df67604"
+    }
+  ],
+  "owned_fixtures_removed": 8
+}
