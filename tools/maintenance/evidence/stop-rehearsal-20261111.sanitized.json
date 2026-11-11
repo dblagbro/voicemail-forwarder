@@ -1,0 +1,123 @@
+{
+  "checked_utc": "2026-11-11T06:45:12.007031+00:00",
+  "image": "sha256:2642c1938ba2b5e7f6628105f452b294dc09b94efa9e7f79ed5069c0dca9453f",
+  "production_touched": false,
+  "provider_traffic": false,
+  "mail_fixture_network": "none",
+  "host_firewall_probe_port": 18089,
+  "firewall_probe_is_separate_from_mail_fixture": true,
+  "cases": [
+    {
+      "fault_phase": "none",
+      "expected_failure": false,
+      "fault_injection_recorded": false,
+      "original_resumed": true,
+      "original_configuration_and_restart_policy_restored": true,
+      "firewall_fence_removed": true,
+      "clean_stop_verified": true,
+      "container_id": "9f94f9b64097c33a8943efe6940c38386bca7752863dd956b8f686b6f6b87251"
+    },
+    {
+      "fault_phase": "input-fenced-4",
+      "expected_failure": true,
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_and_restart_policy_restored": true,
+      "firewall_fence_removed": true,
+      "clean_stop_verified": false,
+      "container_id": "83dc09bc90ed57a3625acc749d94b5b8f658ca2c0c236ede0cf0a563fafe435e"
+    },
+    {
+      "fault_phase": "rules-ready-6",
+      "expected_failure": true,
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_and_restart_policy_restored": true,
+      "firewall_fence_removed": true,
+      "clean_stop_verified": false,
+      "container_id": "dd97ffe1b6b1d438e8abe5e3963ea14f69a57da5315e9f49c52af06c69c04d38"
+    },
+    {
+      "fault_phase": "paused",
+      "expected_failure": true,
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_and_restart_policy_restored": true,
+      "firewall_fence_removed": true,
+      "clean_stop_verified": false,
+      "container_id": "68331b84e1af890e93fb054c0bd1746ef6af79cf4cfcca67fa6d449f80ddcdff"
+    },
+    {
+      "fault_phase": "config_original_retained",
+      "expected_failure": true,
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_and_restart_policy_restored": true,
+      "firewall_fence_removed": true,
+      "clean_stop_verified": false,
+      "container_id": "5b17543fd3895d8750b40b88ec525a3d5a5cedd3bb1a033b0145b93537fefaed"
+    },
+    {
+      "fault_phase": "config_candidate_published",
+      "expected_failure": true,
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_and_restart_policy_restored": true,
+      "firewall_fence_removed": true,
+      "clean_stop_verified": false,
+      "container_id": "03fd975f803f305f0c0c9d2f35c15c47b2bbdce2fae23288a5f3d683d787559b"
+    },
+    {
+      "fault_phase": "term_intent",
+      "expected_failure": true,
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_and_restart_policy_restored": true,
+      "firewall_fence_removed": true,
+      "clean_stop_verified": true,
+      "container_id": "1039f00f1ef02564a593c66ec0731dc156150142f7e34f180a0ee94808974583"
+    },
+    {
+      "fault_phase": "worker_term_queued",
+      "expected_failure": true,
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_and_restart_policy_restored": true,
+      "firewall_fence_removed": true,
+      "clean_stop_verified": true,
+      "container_id": "e99532893fcd48e35a28fe8df582bdf9a80743e11bdb7e1eb2d17a04d850e466"
+    },
+    {
+      "fault_phase": "term_released",
+      "expected_failure": true,
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_and_restart_policy_restored": true,
+      "firewall_fence_removed": true,
+      "clean_stop_verified": false,
+      "container_id": "826c43229825f108478c4b0dfcb03497f0a5360a202642daf73d028fc8b7cf27"
+    },
+    {
+      "fault_phase": "stopped",
+      "expected_failure": true,
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_and_restart_policy_restored": true,
+      "firewall_fence_removed": true,
+      "clean_stop_verified": true,
+      "container_id": "272f2015b71251126858b20f05d9a84023a2387697184ffbda04b23cbcb6a070"
+    },
+    {
+      "fault_phase": "stopped_original_config_restored",
+      "expected_failure": true,
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_and_restart_policy_restored": true,
+      "firewall_fence_removed": true,
+      "clean_stop_verified": true,
+      "container_id": "0f42d52aa2232092bd8690089b8aea8e85736c1dfdbc989218895b9ecd4a19f8"
+    }
+  ],
+  "owned_fixtures_removed": 11,
+  "end_to_end_production_cutover": false
+}
