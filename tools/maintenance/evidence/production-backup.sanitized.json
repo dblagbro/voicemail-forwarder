@@ -1,0 +1,33 @@
+{
+  "phase": "resumed",
+  "started_utc": "2026-11-11T05:50:26.783525+00:00",
+  "updated_utc": "2026-11-11T05:50:29.934863+00:00",
+  "container_id": "8cdc6214d52531c12df025cfe189d525cf346cf0d31168c74aa94e7609943dfb",
+  "image": "sha256:2642c1938ba2b5e7f6628105f452b294dc09b94efa9e7f79ed5069c0dca9453f",
+  "idle_sample": {
+    "accepted": true,
+    "thread_count": 2,
+    "stack_sha256": "f933cb23d517d5fd87d19d0116ebe8687dcfc2b5a83a240f1ecb98731d137748",
+    "master_pid": 4551,
+    "worker_pid": 5119
+  },
+  "backup": {
+    "local": "/var/backups/codex-remediation-20261111/voicemail-preparation-0550/snapshot",
+    "san": "/mnt/s/backups/codex-security-20261111/voicemail-backups/voicemail-preparation-0550",
+    "independent_restore": "/var/backups/codex-remediation-20261111/voicemail-preparation-0550/independent-restore",
+    "manifest_sha256": "b54dfdad5fed12a1d997505862155f3535792a6c5aa6b748dd4d86961f8180f8",
+    "files": 151,
+    "bytes": 13717540,
+    "sqlite_integrity": true,
+    "san_verified": true,
+    "independent_restore_verified": true
+  },
+  "fixture": false,
+  "original_http_200": true,
+  "failure_phase": null,
+  "recovery_error_type": null,
+  "deployed": false,
+  "original_resumed": true,
+  "application_values_exported": false,
+  "error": null
+}

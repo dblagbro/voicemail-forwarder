@@ -1,0 +1,34 @@
+{
+  "checked_utc": "2026-11-11T05:53:05.366656+00:00",
+  "production_unchanged": true,
+  "deployed": false,
+  "network": "none",
+  "published_ports": false,
+  "polling_and_alerts_disabled_in_separate_copies": true,
+  "application_values_exported": false,
+  "provider_acceptance": false,
+  "source_snapshot_unchanged": true,
+  "cases": [
+    {
+      "role": "original",
+      "image": "sha256:2642c1938ba2b5e7f6628105f452b294dc09b94efa9e7f79ed5069c0dca9453f",
+      "http_200": true,
+      "sqlite_integrity": true,
+      "deduplication_and_attachment_records_unchanged": true,
+      "attachment_bytes_unchanged": true,
+      "clean_stop": true,
+      "container_id": "5d4131fdceb3fe3d6137f5ca737a7fd3995d4df89f60429964ebdd7252409186"
+    },
+    {
+      "role": "candidate",
+      "image": "sha256:efa8ab304beab278a16846840907f5774a8e3eff08ae97d034d23878cb67b08b",
+      "http_200": true,
+      "sqlite_integrity": true,
+      "deduplication_and_attachment_records_unchanged": true,
+      "attachment_bytes_unchanged": true,
+      "clean_stop": true,
+      "container_id": "7b229ac559e600026270d98df2767986bbf1cbd024ad7aead1d0799086cf9d98"
+    }
+  ],
+  "owned_fixtures_removed": 2
+}
