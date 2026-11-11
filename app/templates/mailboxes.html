@@ -7,6 +7,21 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+  <style>
+    .hint{color:#666;font-size:.9em;margin-left:8px}
+    .test-result{margin-top:4px;font-size:.9em;max-width:460px}
+    .t-pass{color:#0a0;font-weight:700}
+    .t-fail{color:#c00;font-weight:700}
+    .t-run{color:#666;font-style:italic}
+    .t-note{color:#333}
+    .t-err{color:#c00;display:block;word-break:break-word;margin-top:2px}
+    .t-steps{margin:4px 0 0 0;padding-left:16px}
+    .t-steps li{margin:1px 0}
+    .t-steps .bad{color:#c00}
+    .t-steps .good{color:#0a0}
+    .t-steps .lbl{font-weight:600}
+    details summary{cursor:pointer;color:#06c}
+  </style>
 </head>
 <body>
 <div class="nav">
@@ -19,6 +34,11 @@
 
 <h1>Mailboxes</h1>
 
+<p>
+  <button type="button" onclick="testAll()">Test all mailboxes</button>
+  <span class="hint">POP3 connect, authenticate and list only &mdash; read-only, never fetches or deletes a message.</span>
+</p>
+
 <table id="mbx" class="display">
   <thead>
     <tr>
@@ -27,6 +47,7 @@
       <th>User</th>
       <th>Dest</th>
       <th>Enabled</th>
+      <th>Test</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -38,6 +59,10 @@
       <td>{{ m.pop3_user }}</td>
       <td>{{ m.dest_to }}</td>
       <td>{{ 'yes' if m.enabled else 'no' }}</td>
+      <td class="test-cell" data-mbx="{{ m.name }}">
+        <button type="button" onclick="testOne('{{ m.name }}')">Test</button>
+        <div class="test-result"></div>
+      </td>
       <td>
         <form action="/mailboxes/toggle/{{ m.name }}" method="post" style="display:inline">
           <button type="submit">{{ 'Disable' if m.enabled else 'Enable' }}</button>
@@ -114,8 +139,87 @@ function closePw(){
   modal.style.display = 'none';
 }
 
+function esc(v){
+  // POP3 banners and server error strings land in here - never trust them as HTML.
+  var d = document.createElement('div');
+  d.textContent = (v === null || v === undefined) ? '' : String(v);
+  return d.innerHTML;
+}
+
+function cellFor(name){
+  var cells = document.querySelectorAll('.test-cell');
+  for (var i = 0; i < cells.length; i++){
+    if (cells[i].getAttribute('data-mbx') === name) return cells[i];
+  }
+  return null;
+}
+
+function renderResult(box, r){
+  var steps = '';
+  if (r.steps && r.steps.length){
+    steps = '<details><summary>details</summary><ul class="t-steps">';
+    for (var i = 0; i < r.steps.length; i++){
+      var s = r.steps[i];
+      steps += '<li class="' + (s.ok ? 'good' : 'bad') + '">'
+             + '<span class="lbl">' + esc(s.label) + ':</span> '
+             + esc(s.ok ? 'ok' : 'FAILED') + (s.note ? ' &mdash; ' + esc(s.note) : '')
+             + '</li>';
+    }
+    steps += '</ul></details>';
+  }
+  if (r.ok){
+    var note = r.messages + ' message(s)';
+    if (r.bytes !== null && r.bytes !== undefined) note += ', ' + r.bytes + ' bytes';
+    note += ', ' + r.elapsed_ms + 'ms';
+    box.innerHTML = '<span class="t-pass">PASS</span> <span class="t-note">'
+                  + esc(note) + '</span>' + steps;
+  } else {
+    box.innerHTML = '<span class="t-fail">FAIL</span> <span class="t-note">'
+                  + esc('at ' + (r.stage || '?') + ' after ' + (r.elapsed_ms || 0) + 'ms')
+                  + '</span><span class="t-err">' + esc(r.error || 'unknown error')
+                  + '</span>' + steps;
+  }
+}
+
+function testOne(name){
+  var cell = cellFor(name);
+  if (!cell) return;
+  var box = cell.querySelector('.test-result');
+  box.innerHTML = '<span class="t-run">testing&hellip;</span>';
+  return fetch('/mailboxes/test/' + encodeURIComponent(name), {method: 'POST'})
+    .then(function(resp){ return resp.json(); })
+    .then(function(r){ renderResult(box, r); })
+    .catch(function(e){
+      box.innerHTML = '<span class="t-fail">FAIL</span><span class="t-err">'
+                    + esc('request failed: ' + e) + '</span>';
+    });
+}
+
+function testAll(){
+  var cells = document.querySelectorAll('.test-cell');
+  for (var i = 0; i < cells.length; i++){
+    cells[i].querySelector('.test-result').innerHTML = '<span class="t-run">testing&hellip;</span>';
+  }
+  fetch('/mailboxes/test-all', {method: 'POST'})
+    .then(function(resp){ return resp.json(); })
+    .then(function(d){
+      (d.results || []).forEach(function(r){
+        var cell = cellFor(r.mailbox);
+        if (cell) renderResult(cell.querySelector('.test-result'), r);
+      });
+    })
+    .catch(function(e){
+      var cs = document.querySelectorAll('.test-result');
+      for (var i = 0; i < cs.length; i++){
+        cs[i].innerHTML = '<span class="t-fail">FAIL</span><span class="t-err">'
+                        + esc('request failed: ' + e) + '</span>';
+      }
+    });
+}
+
 $(document).ready(function(){
-  new DataTable('#mbx');
+  // The Test column holds live results, not sortable data.
+  new DataTable('#mbx', {columnDefs: [{targets: 5, orderable: false, searchable: false}]});
 });
 </script>
 

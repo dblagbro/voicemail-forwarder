@@ -57,7 +57,7 @@ services:
       - ./logs:/app/logs
 ```
 
-After starting, access the web UI at `http://localhost:8089`
+The application has no built-in login. Restrict port 8089 to a trusted administration path and use an authenticated reverse proxy. Do not expose the raw port publicly. After starting, access the web UI at `http://localhost:8089`.
 
 ## ⚙️ Configuration
 
@@ -199,7 +199,7 @@ The web interface provides comprehensive monitoring and management:
 
 ### Host Network Mode (Recommended)
 
-This service requires `network_mode: host` to access POP3 servers on local networks:
+The existing deployment uses `network_mode: host`; a routed Docker bridge can also reach LAN mail servers:
 
 ```yaml
 network_mode: host
@@ -327,7 +327,7 @@ python app.py
 **Solutions**:
 - Check SMTP configuration in Settings
 - Test SMTP connection
-- Clear state database: `rm data/state.db` (will reprocess all messages)
+- Preserve `data/state.db`: deleting deduplication history can resend previously forwarded mail. Diagnose with a consistent SQLite backup in an isolated fixture.
 - Check logs for SMTP errors
 
 #### Web UI not accessible
@@ -401,3 +401,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Note**: This is designed for enterprise voicemail systems that use POP3 for message delivery. Common use cases include Avaya Communication Manager, Cisco Unity, and similar systems.
+
+## Security maintenance (2026-11-11)
+
+See [SECURITY-MAINTENANCE.md](SECURITY-MAINTENANCE.md) for the maintained runtime baseline, isolated validation, recovery prerequisites and deployment status. When a mailbox has `use_stls=true`, a TLS failure now stops that mailbox before USER/PASS; the connection-test UI reports the same failure. Explicit `use_stls=false` remains an operator-selected legacy mode.

@@ -4,6 +4,16 @@
   <meta charset="utf-8">
   <title>Logs</title>
   <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .filters{border:1px solid #ccc;padding:12px;border-radius:6px;margin:10px 0}
+    .filters .grid{margin:0 0 10px 0}
+    .filter-actions{display:flex;gap:10px;align-items:center}
+    .meta{background:#f4f4f4;border:1px solid #ddd;padding:8px 10px;border-radius:4px;margin:10px 0;font-size:.9em}
+    .meta code{background:#fff;padding:1px 4px;border:1px solid #ddd;border-radius:3px}
+    .warn{color:#a60;font-weight:600}
+    pre{background:#fafafa;border:1px solid #ddd;padding:10px;overflow-x:auto}
+    .empty{color:#666;font-style:italic;padding:10px}
+  </style>
 </head>
 <body>
 <div class="nav">
@@ -16,18 +26,87 @@
 
 <h1>Logs</h1>
 
-<p>
-  Order:
-  {% if order == 'new' %}
-    <strong>Newest first</strong> |
-    <a href="/logs?order=old">Oldest first</a>
-  {% else %}
-    <a href="/logs?order=new">Newest first</a> |
-    <strong>Oldest first</strong>
-  {% endif %}
-</p>
+<form class="filters" method="get" action="/logs">
+  <div class="grid">
+    <label>Contains text
+      <input type="text" name="q" value="{{ f.q }}" placeholder="caller number, UIDL, any string">
+    </label>
+    <label>Result / event
+      <select name="event">
+        <option value="">(any)</option>
+        {% for e in events %}
+          <option value="{{ e }}" {% if f.event == e %}selected{% endif %}>{{ e }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Level
+      <select name="level">
+        <option value="">(any)</option>
+        {% for l in levels %}
+          <option value="{{ l }}" {% if f.level == l %}selected{% endif %}>{{ l }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Mailbox
+      <select name="mailbox">
+        <option value="">(all)</option>
+        {% for m in mailbox_names %}
+          <option value="{{ m }}" {% if f.mailbox == m %}selected{% endif %}>{{ m }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>From date
+      <input type="date" name="since" value="{{ f.since }}">
+    </label>
+    <label>To date
+      <input type="date" name="until" value="{{ f.until }}">
+    </label>
+    <label>Order
+      <select name="order">
+        <option value="new" {% if order != 'old' %}selected{% endif %}>Newest first</option>
+        <option value="old" {% if order == 'old' %}selected{% endif %}>Oldest first</option>
+      </select>
+    </label>
+    <label>Max lines
+      <select name="limit">
+        {% for n in ['200','500','2000','5000','20000'] %}
+          <option value="{{ n }}" {% if f.limit == n %}selected{% endif %}>{{ n }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
+  <div class="filter-actions">
+    <button type="submit">Search</button>
+    <a href="/logs">Reset</a>
+  </div>
+</form>
 
+<div class="meta">
+  Showing <strong>{{ meta.shown }}</strong> of
+  {% if meta.truncated %}&ge;{% endif %} <strong>{{ meta.matched }}</strong> matching line(s).
+  {% if meta.truncated %}
+    <span class="warn">Line limit reached &mdash; there may be more. Narrow the filters or raise &ldquo;Max lines&rdquo;.</span>
+  {% endif %}
+  {% if meta.budget_hit %}
+    <span class="warn">Scan time budget reached, so older files were not fully searched.</span>
+  {% endif %}
+  <br>
+  Searched {{ meta.scanned | length }} of {{ meta.available | length }} retained log file(s):
+  {% for s in meta.scanned %}<code>{{ s.file }}</code>&nbsp;({{ s.matches }}){% if not loop.last %}, {% endif %}{% endfor %}
+  {% if not meta.scanned %}<em>none</em>{% endif %}
+  {% if meta.skipped %}
+    <br>Skipped as out of date range: {% for s in meta.skipped %}<code>{{ s }}</code>{% if not loop.last %}, {% endif %}{% endfor %}
+  {% endif %}
+  <br>
+  Available: {% for a in meta.available %}<code>{{ a }}</code>{% if not loop.last %}, {% endif %}{% endfor %}
+  &mdash; rotated and <code>.gz</code> files are searched too, so history reaches back past the last rotation.
+</div>
+
+{% if logs %}
 <pre>{{ logs }}</pre>
+{% else %}
+<div class="empty">No log lines matched these filters.</div>
+{% endif %}
 
 </body>
 </html>

@@ -1,0 +1,63 @@
+{
+  "started_utc": "2026-11-11T04:45:46.936878+00:00",
+  "production_modified": false,
+  "deployed": false,
+  "checks": {
+    "build": {
+      "exit": 0,
+      "sha256": "4627b2dc60871e581fbbe7bef01f64d7e7fcf20fb36ebd63727d67f846a2727f"
+    },
+    "tests": {
+      "exit": 0,
+      "sha256": "64c6387c73428590fb0cf5e6b9598febee368cecd8440d6bdd0d3af510f6ea5d"
+    },
+    "runtime-dependencies": {
+      "exit": 0,
+      "sha256": "f0530c17bb4deca76cda5422545081c839be95524694b68456f2fdcb6018b2b9"
+    },
+    "scan": {
+      "exit": 0,
+      "sha256": "d1e3e86e31f5ef521cb9a06a742410e61a1453961120dc9cd147a1e7cf78304f"
+    }
+  },
+  "source_sha256": {
+    "Dockerfile": "260d538f2da2522049ee7dbc2865cff250407387c6625269c25db3366fc2ede3",
+    "requirements.txt": "7e99a1b70e0ab7c43574be3f2ad0b5a64e410272246aac6091c81bf4f41fd013",
+    ".dockerignore": "975d46d2e30400deb1061eee48a149ec52343eab328889efa153f50152b956c6",
+    "requirements.lock": "8c804089d21156ace63e116f33433d24bedf6d82d28cfaf178e1c91ecc6df43f",
+    "app/__init__.py": "45a3603058b992b31c680ff2ac1fbba59d6b943ae295c60b60f0de00286e0eba",
+    "app/app.py": "c95f2b82237fc07917b8e4c5d88e9f2fe6d387cd87c71b60fd97855f7cfde527",
+    "app/core.py": "0878bb19ec91d651c48d430bcc3457bd75c85f6d10a979439f02acc4e21a9444",
+    "app/static/style.css": "c9ce5d539349257fdd93385d03b6c2ccc6e4f89688f9406e899cf62e2d88bbcb",
+    "app/templates/attachments.html": "ef5a301e9945522003d0bc96cecb69e33a74bf8135a8bae0fd256dee4e192ea4",
+    "app/templates/index.html": "12ea3dc2f70dcf3d2a30911afc3743a604a978b74e4de6d57f37ec8276dfb265",
+    "app/templates/logs.html": "9dce86d8d7163783a969b9030b86efaad3fd877f38b62b4c8b61b7dc030b347f",
+    "app/templates/mailboxes.html": "927e7be4136cb57f305821268eadcea971e6333394d2e48a2fe3bc96f792224d",
+    "app/templates/settings.html": "a602da5de8c9132226f66ebf98ae9a8a192721789ca222bf2cb03f62e07b70cd",
+    "tests/test_runtime.py": "ce08151bb078b7b6e0d1bbae7c3cc03ef5e7f3fcdcdd829fb2fdc3776cfb4b0e",
+    "tools/verify_runtime.py": "212af40468a4f8a1358fcbc428e4e902ef52759c2c628ce52800aac6eda7d6f7"
+  },
+  "image_id": "sha256:efa8ab304beab278a16846840907f5774a8e3eff08ae97d034d23878cb67b08b",
+  "packages": {
+    "Flask": "3.1.3",
+    "blinker": "1.9.0",
+    "gunicorn": "27.0.0",
+    "Jinja2": "3.1.6",
+    "itsdangerous": "2.2.0",
+    "Werkzeug": "3.1.9",
+    "click": "8.5.1",
+    "MarkupSafe": "3.0.4"
+  },
+  "scan": {
+    "CRITICAL": 0,
+    "HIGH": 0,
+    "MEDIUM": 0,
+    "LOW": 0,
+    "UNKNOWN": 0
+  },
+  "scan_findings": [],
+  "scan_sha256": "533b8b08491d46d5b12af7a2904cda010257eaf7b421ac329afedf55b1eaca80",
+  "phase": "candidate_verified_not_deployed",
+  "updated_utc": "2026-11-11T04:45:52.406010+00:00",
+  "hash_scope": "Runtime, build, test and verifier sources at candidate verification; release prose and evidence excluded."
+}
