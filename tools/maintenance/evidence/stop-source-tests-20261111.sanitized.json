@@ -1,0 +1,24 @@
+{
+  "checked_utc": "2026-11-11T06:46:18.304512+00:00",
+  "maintenance_unit_tests_passed": 28,
+  "ruff_F_passed": true,
+  "runtime_application_changed": false,
+  "production_changed": false,
+  "source_sha256": {
+    "configuration_files.py": "0d6eb303e4f2252475d6a66968eee3960c705b380b691d57f8c8fce1e7fa7f97",
+    "launch_backup.py": "9ad83472ab469040ab3215b4b039f7700e711b2b7ba9b2a98b365abf711af686",
+    "poll_boundary.py": "2c0de2352d248a14551eb384108b8589b5e8d30d8d57575f8f2ccc1dc9350f96",
+    "quiesce_backup.py": "710f70e450dbf124d9446dc6a5db11b6ca87d51a3a3c4c180c5a1a4b320a13a8",
+    "rehearse_quiescence.py": "2bcce6af940adb01d407c9ca69613b8cd6cb2f97ffaffd8d7400fa1092aa5271",
+    "test_configuration_files.py": "4387228d94b74a9ebebeab17b4789e1d85cc2fc63834c59778b7d45f32011a6e",
+    "test_poll_boundary.py": "be745086010604dabe07ab83c493c17c845ca2329cb3a8bbfcf76f658a0b6e06",
+    "test_quiesce_backup.py": "d025e59ceeaff54a5d8d2a5af301b35039dabfe2ec3f996d302bdaf9cbffc82e",
+    "verify_restore.py": "f3d8aa24ecce36ef472e44299846b664757bc2397e95be27b9a5ced73cbdbc31",
+    "cutover_files.py": "acc119a27aecc23280e264cd8b45862a7f2bb72961b1e88cc8bb5056701b2343",
+    "ingress_fence.py": "a5732dcc684c1df06544dbed6f085e2d23d0f9ca95735b6d059335e639d98c2a",
+    "quiescent_stop.py": "55c6e293e5c4e7ca7cff005285374861aef6cef26089e28d02e53292ad2d7ded",
+    "rehearse_stop.py": "e3b2b863a4b45df44790859f4c0801bbd2742c605bd883e1e5ca5216da040dd8",
+    "test_ingress_fence.py": "63a83431246395dd3d03a9684b58416f5f6c3bf2650ec8d3f399293614119412",
+    "test_quiescent_stop.py": "d4e26c6b55e070e1bdf77f68706bcf31b65d5b3dedf82dbe1f88d35343f47fb3"
+  }
+}

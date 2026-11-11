@@ -4,7 +4,7 @@ This Linux/root procedure snapshots the existing `voicemail-forwarder` container
 It does not deploy an image, stop/restart the service, alter mail configuration,
 change its restart policy, or restore old application data.
 
-Run the 16 standard-library unit tests with:
+Run the standard-library unit tests with:
 
 ```sh
 python3 -m unittest discover -s tools/maintenance -v
@@ -102,3 +102,48 @@ budget, passing `verify_restore.py --backup-generation PRIVATE_COMPLETED_GENERAT
 --generation NEW_PRIVATE_TEST_GENERATION --original-image EXACT_ORIGINAL_ID
 --candidate-image EXACT_CANDIDATE_ID`. A completed backup journal and its matching
 SAN manifest are mandatory. This test never writes back into live data.
+
+## Idle-stop primitives and isolated interruption rehearsal
+
+`quiescent_stop.py` is a library, not a production deployment command. The
+caller must fence HTTP ingress, reset existing service connections, freeze the
+exact original container and accept a complete idle-worker sample. The library
+then durably fences polling, alerts and SMTP test actions in the private config,
+sets restart=no, queues TERM to both verified Gunicorn worker and master while
+still frozen, and unfreezes. Only exit 0 without OOM is accepted; no worker
+force-kill is used. Recovery restores original configuration and restart policy
+and resumes only the owned original container. Application data is never rolled
+back. Concurrent configuration/runtime edits fail closed for operator review.
+
+`ingress_fence.py` owns one temporary INPUT-chain generation in IPv4 and IPv6
+for an exact backend TCP port. Only root socket-marked loopback probes bypass
+the fence. Removal checks ownership and preserves unexpected foreign rules.
+This is an outage fence, not a permanent authentication or CSRF fix.
+
+`rehearse_stop.py` uses fresh synthetic mail data, network=none, no published
+container ports and resource limits. A separate IPv4/IPv6 loopback listener on
+port18089 exercises the host firewall; it does not pretend to test production
+Nginx or end-to-end mail ingress. The transient systemd worker has ExecStopPost
+recovery and controlled SIGKILL injection at durable boundaries. Run only with
+the shared capacity guard, using a NEW private generation and the exact retained
+original image:
+
+```sh
+sudo python3 /mnt/s/code/tmrwww01-docker-scripts/security/2026-11-09/storage/capacity_guard.py \
+  --peak-gib 1 -- python3 tools/maintenance/rehearse_stop.py rehearse \
+  --generation /var/backups/codex-remediation-20261111/NEW_REHEARSAL \
+  --image sha256:EXACT_RETAINED_ORIGINAL_IMAGE
+```
+
+These primitives still need integration into a production operator with a fresh
+cutover snapshot, canonical Compose image publication, candidate warmup, explicit
+activation/recovery boundaries and live acceptance. Do not deploy by calling the
+library ad hoc. Controller-kill tests do not establish reboot/power-loss recovery.
+
+Recorded idle-stop verification: 28 maintenance unit tests and 11 exact-original
+image fixtures passed on November11. Ten cases durably recorded the intended
+SIGKILL injection before controller exit; all recovered with original config
+and restart policy, valid SQLite, HTTP200 and no remaining owned firewall chain.
+All 11 fixture containers were removed. The host firewall check used a separate
+loopback listener, so end-to-end production ingress remains unverified.
+Production was not changed and the candidate remains undeployed.
