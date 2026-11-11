@@ -79,3 +79,26 @@ their existing authentication/CSRF limitations; this helper does not change them
 Keep all private generations outside Git. Do not publish config, cookies,
 credentials, mailbox names, message/attachment contents, raw logs or private
 manifests. No unchanged-image vulnerability scan is implied by this preparation.
+
+## Recorded preparation result — 2026-11-11
+
+The original production image remains running, with its container identity and
+start time unchanged. The 05:50 UTC snapshot completed in a 3.43-second systemd
+unit: 151 files / 13,717,540 bytes verified locally, on the SAN and in an
+independent restoration. The original service returned HTTP 200. This unit
+duration includes verification; it is not a measurement of freeze duration.
+
+`verify_restore.py` booted both the original and previously scanned candidate
+from separate private SAN-snapshot copies. Both returned HTTP 200, preserved
+all deduplication/attachment records and attachment bytes, passed SQLite
+integrity, and stopped cleanly. Polling/alerts were disabled only in these
+independent copies; network access and published ports were absent. Both owned
+fixture containers were removed. Production and the source snapshot were unchanged.
+Sanitized receipts are in `evidence/`; no mailbox values, attachments or private
+configuration are included. The candidate remains undeployed.
+
+Reproduce the offline restore check through the capacity guard with a 1 GiB
+budget, passing `verify_restore.py --backup-generation PRIVATE_COMPLETED_GENERATION
+--generation NEW_PRIVATE_TEST_GENERATION --original-image EXACT_ORIGINAL_ID
+--candidate-image EXACT_CANDIDATE_ID`. A completed backup journal and its matching
+SAN manifest are mandatory. This test never writes back into live data.
