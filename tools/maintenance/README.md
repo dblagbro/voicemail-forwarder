@@ -147,3 +147,45 @@ and restart policy, valid SQLite, HTTP200 and no remaining owned firewall chain.
 All 11 fixture containers were removed. The host firewall check used a separate
 loopback listener, so end-to-end production ingress remains unverified.
 Production was not changed and the candidate remains undeployed.
+
+## Integrated TLS ingress and activation rehearsal
+
+`rehearse_ingress_activation.py` connects a temporary TLS/Basic Auth Nginx proxy
+to original and candidate mail containers on a test host port. It exercises
+fenced warmup, configuration activation, and rollback while preserving newly
+committed deduplication and attachment records. Seven actual controller SIGKILL
+cases plus normal completion must recover the original configuration, restart
+policy, authenticated HTTP 200 and anonymous HTTP 401. The systemd backstop must
+remove only its own firewall rules. Only newly owned synthetic containers are
+removed; all generation directories remain retained.
+
+The fixture refuses real mailboxes, SMTP and alerts. Exact images, generation
+labels, mount paths, command and host network are checked before mutation.
+The backend port must be unused and in 18000..18999. No production Nginx or
+canonical Compose file is changed, and the production container identity,
+configuration and start time are compared between cases.
+
+Run through the shared capacity guard with a 1 GiB budget. Supply a **new local
+runtime directory** and a **new SAN evidence directory**. The production mutable
+data is local: the fixture must model that filesystem boundary. The initial
+all-NFS fixture failed closed because NFS rejected `RENAME_NOREPLACE`; original
+service recovery and fixture removal succeeded. The helper now probes that
+primitive before creating any container. It does not weaken its non-overwriting
+publication guarantee. SAN journals and immutable evidence remain on the SAN.
+
+```sh
+sudo python3 /mnt/s/code/tmrwww01-docker-scripts/security/2026-11-09/storage/capacity_guard.py \
+  --peak-gib 1 -- python3 tools/maintenance/rehearse_ingress_activation.py rehearse \
+  --generation /mnt/s/backups/PRIVATE_PARENT/NEW_INGRESS_REHEARSAL \
+  --runtime-root /var/backups/PRIVATE_LOCAL_PARENT/NEW_SYNTHETIC_RUNTIME \
+  --original-image sha256:EXACT_ORIGINAL_ID \
+  --candidate-image sha256:EXACT_CANDIDATE_ID \
+  --nginx-image sha256:EXACT_NGINX_ID
+```
+
+`ingress-activation.sanitized.json` contains status-only evidence. Private TLS
+keys, generated Basic Auth credentials, journals and fixture data must stay
+outside Git. This remains a rehearsal, not a production operator: fresh cutover
+backup/recovery, canonical Compose publication, real provider acceptance and
+reboot/power-loss recovery remain separate gates. An unchanged-image scan is
+not implied by these tests.
