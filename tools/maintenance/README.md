@@ -135,7 +135,7 @@ sudo python3 /mnt/s/code/tmrwww01-docker-scripts/security/2026-11-09/storage/cap
   --image sha256:EXACT_RETAINED_ORIGINAL_IMAGE
 ```
 
-These primitives still need integration into a production operator with a fresh
+At this historical checkpoint the primitives still needed integration into a production operator with a fresh
 cutover snapshot, canonical Compose image publication, candidate warmup, explicit
 activation/recovery boundaries and live acceptance. Do not deploy by calling the
 library ad hoc. Controller-kill tests do not establish reboot/power-loss recovery.
@@ -207,3 +207,7 @@ it. Older images ignore the flag and still need the legacy disabled-mailbox/SMTP
 configuration and idle stop. Journals without a version retain the exact legacy
 configuration bytes so interrupted older operations remain replayable. Unknown
 versions are rejected. Production rollout remains gated on the complete operator.
+
+The subsequent [production operator and its rehearsal](PRODUCTION-ROLLOUT.md)
+integrate backup, runtime recreation, Compose publication, activation and recovery.
+An operator source merge and synthetic test result do not claim deployment.
