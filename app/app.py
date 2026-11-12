@@ -10,6 +10,11 @@ def create_app():
     app = Flask(__name__)
     app.secret_key = os.environ.get("FLASK_SECRET", "voicemail-forwarder-dev")
 
+    @app.before_request
+    def maintenance_gate():
+        if request.method not in {"GET", "HEAD", "OPTIONS"} and core.maintenance_active():
+            return "Service is in maintenance mode\n", 503, {"Retry-After": "1"}
+
     @app.route("/")
     def index():
         cfg = core.load_cfg()

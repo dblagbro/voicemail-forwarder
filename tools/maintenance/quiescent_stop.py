@@ -19,7 +19,7 @@ from cutover_files import (
 )
 
 
-def maintenance_config(original):
+def maintenance_config(original, *, explicit=False):
     result = json.loads(original)
     if not isinstance(result.get("mailboxes"), list) or not isinstance(
         result.get("system"), dict
@@ -29,6 +29,8 @@ def maintenance_config(original):
         mailbox["enabled"] = False
     system = result["system"]
     system.update(alert_email="", alert_hours=0, poll_interval_seconds=3600)
+    if explicit:
+        system["maintenance"] = True
     # Fence queued test-send actions too, even though ingress is already blocked.
     system["smtp"] = {
         **system.get("smtp", {}),
@@ -42,7 +44,11 @@ def maintenance_config(original):
 
 def publication(directory, state, reverse=False):
     original = read_regular(directory / "original-config.json")[0]
-    fenced = maintenance_config(original)
+    version = state.get("maintenance_version", 0)
+    if type(version) is not int or version not in (0, 1):
+        raise ValueError("Unknown maintenance configuration version")
+    # Old journals must retain their exact deterministic configuration bytes.
+    fenced = maintenance_config(original, explicit=version == 1)
     before, after = (fenced, original) if reverse else (original, fenced)
     return Publication(
         Path(state["configuration_path"]),

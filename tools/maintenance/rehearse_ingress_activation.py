@@ -162,7 +162,8 @@ def make_stop_state(current, state, directory):
     safe_config(raw)
     directory.mkdir(mode=0o700)
     q.write_new(directory / "original-config.json", raw)
-    return {"phase": "prepared", "container_id": current["Id"], "image": current["Image"],
+    return {"phase": "prepared", "maintenance_version": 1,
+            "container_id": current["Id"], "image": current["Image"],
             "configuration_fingerprint": q.config_fingerprint(current),
             "configuration_path": str(config), "configuration_mode": metadata.st_mode & 0o777,
             "configuration_uid": metadata.st_uid, "configuration_gid": metadata.st_gid,

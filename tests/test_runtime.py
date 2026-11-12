@@ -2,6 +2,7 @@
 
 import gzip
 import importlib
+import json
 import os
 import poplib
 import socket
@@ -73,6 +74,94 @@ class RuntimeTests(unittest.TestCase):
         self.send = patch.object(core, "smtp_send")
         self.smtp = self.send.start()
         self.addCleanup(self.send.stop)
+
+    def maintenance_config(self):
+        cfg = core.load_cfg()
+        cfg["system"]["maintenance"] = True
+        cfg["system"]["poll_interval_seconds"] = 3600
+        core.save_cfg(cfg)
+        return cfg
+
+    def test_maintenance_preserves_expired_attachment_and_poll_timestamp(self):
+        self.maintenance_config()
+        attachment = Path(core.ATT_DIR) / "expired.txt"
+        attachment.write_bytes(b"synthetic old attachment")
+        with sqlite3.connect(core.DB_PATH) as conn:
+            conn.execute("INSERT INTO attachments(filename,mailbox,subject,ts) VALUES (?,?,?,?)",
+                         (attachment.name, "fixture", "synthetic", "1900-01-01T00:00:00"))
+        Path(core.LAST_POLL_FILE).write_text("unchanged")
+        before = Path(core.DB_PATH).read_bytes()
+        core.poll_once()
+        self.assertTrue(attachment.exists())
+        self.assertEqual(Path(core.DB_PATH).read_bytes(), before)
+        self.assertEqual(Path(core.LAST_POLL_FILE).read_text(), "unchanged")
+        self.pop.retr.assert_not_called()
+        self.smtp.assert_not_called()
+
+    def test_maintenance_rejects_all_http_mutations(self):
+        self.maintenance_config()
+        before = Path(core.CFG_PATH).read_bytes()
+        for path in ["/settings", "/poll-now", "/smtp-test", "/mailboxes/add",
+                     "/mailboxes/delete/fixture", "/attachments/delete/fixture.txt"]:
+            with self.subTest(path=path):
+                response = self.client.post(path)
+                self.assertEqual(response.status_code, 503)
+        self.assertEqual(Path(core.CFG_PATH).read_bytes(), before)
+        self.assertEqual(self.client.get("/").status_code, 200)
+        self.smtp.assert_not_called()
+
+    def test_maintenance_rejects_direct_manual_poll_and_provider_tests(self):
+        self.maintenance_config()
+        self.assertFalse(core.manual_poll_now())
+        result = core.pop3_test(self.mailbox)
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["stage"], "maintenance")
+        self.pop.user.assert_not_called()
+        self.send.stop()
+        with patch.object(core.smtplib, "SMTP") as connect:
+            with self.assertRaisesRegex(RuntimeError, "maintenance"):
+                core.smtp_test({"host": "smtp.invalid"}, "fixture@example.invalid")
+            connect.assert_not_called()
+
+    def test_maintenance_loop_skips_poll_and_stall_alert(self):
+        cfg = self.maintenance_config()
+        cfg["system"].update(alert_email="fixture@example.invalid", alert_hours=1)
+        core.save_cfg(cfg)
+        Path(core.LAST_POLL_FILE).write_text("1900-01-01T00:00:00")
+        with patch.object(core, "_poll_stop") as event, patch.object(core, "poll_once") as poll:
+            event.is_set.side_effect = [False, True]
+            core.poll_loop()
+            event.wait.assert_called_once_with(timeout=1)
+            poll.assert_not_called()
+        self.smtp.assert_not_called()
+
+    def test_maintenance_loop_rechecks_before_long_configured_interval(self):
+        cfg = self.maintenance_config()
+        def resume(**kwargs):
+            cfg["system"]["maintenance"] = False
+            core.save_cfg(cfg)
+        with patch.object(core, "_poll_stop") as event, patch.object(core, "poll_once") as poll:
+            event.is_set.side_effect = [False, False, True]
+            event.wait.side_effect = resume
+            core.poll_loop()
+            self.assertEqual(event.wait.call_args_list[0].kwargs, {"timeout": 1})
+            poll.assert_called_once()
+
+    def test_invalid_maintenance_configuration_fails_closed(self):
+        cfg = core.load_cfg()
+        for value in ["false", None, 0, [], {}]:
+            with self.subTest(value=value):
+                cfg["system"]["maintenance"] = value
+                core.save_cfg(cfg)
+                self.assertTrue(core.maintenance_active())
+                core.poll_once()
+                self.assertEqual(self.client.post("/poll-now").status_code, 503)
+        for raw in ["{", "[]", '{"system": []}']:
+            Path(core.CFG_PATH).write_text(raw)
+            self.assertTrue(core.maintenance_active())
+            core.poll_once()
+        self.pop.retr.assert_not_called()
+        self.smtp.assert_not_called()
 
     def test_seen_uidl_never_fetches_or_forwards(self):
         core.seen_uidl_add("fixture", "fixture-uidl")
@@ -196,8 +285,13 @@ class RuntimeTests(unittest.TestCase):
 
 class GunicornTests(unittest.TestCase):
     @classmethod
+    def prepare_fixture(cls):
+        pass
+
+    @classmethod
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory(prefix="voicemail-http-")
+        cls.prepare_fixture()
         with socket.socket() as sock:
             sock.bind(("127.0.0.1", 0))
             cls.port = sock.getsockname()[1]
@@ -275,6 +369,46 @@ class GunicornTests(unittest.TestCase):
                     + b"\r\nContent-Length: 0\r\n\r\n"
                 )
                 self.assertIn(b"400", response.split(b"\r\n", 1)[0])
+
+
+class MaintenanceGunicornTests(GunicornTests):
+    @classmethod
+    def prepare_fixture(cls):
+        base = Path(cls.tmp.name)
+        (base / "data").mkdir()
+        (base / "logs/attachments").mkdir(parents=True)
+        cls.config = base / "data/config.json"
+        cls.timestamp = base / "data/last_poll.txt"
+        cls.attachment = base / "logs/attachments/expired.txt"
+        cfg = core.default_config()
+        cfg["system"].update(maintenance=True, poll_interval_seconds=3600,
+                             attachment_retention_months=1)
+        cls.config.write_text(json.dumps(cfg))
+        cls.timestamp.write_text("unchanged")
+        cls.attachment.write_bytes(b"synthetic old attachment")
+        with sqlite3.connect(base / "data/state.db") as conn:
+            conn.execute("CREATE TABLE attachments(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                         "filename TEXT NOT NULL, mailbox TEXT NOT NULL, subject TEXT, ts TEXT NOT NULL)")
+            conn.execute("INSERT INTO attachments(filename,mailbox,subject,ts) VALUES (?,?,?,?)",
+                         ("expired.txt", "fixture", "synthetic", "1900-01-01T00:00:00"))
+
+    def test_maintenance_warmup_preserves_then_activation_resumes_promptly(self):
+        time.sleep(1.2)  # Exercise a real maintenance wait cycle in Gunicorn.
+        self.assertTrue(self.attachment.exists())
+        self.assertEqual(self.timestamp.read_text(), "unchanged")
+        response = self.exchange(b"POST /poll-now HTTP/1.1\r\nHost: localhost\r\n"
+                                 b"Content-Length: 0\r\nConnection: close\r\n\r\n")
+        self.assertIn(b"503", response.split(b"\r\n", 1)[0])
+        cfg = json.loads(self.config.read_text())
+        cfg["system"]["maintenance"] = False
+        pending = self.config.with_suffix(".pending")
+        pending.write_text(json.dumps(cfg))
+        os.replace(pending, self.config)
+        deadline = time.monotonic() + 5
+        while time.monotonic() < deadline and self.timestamp.read_text() == "unchanged":
+            time.sleep(0.1)
+        self.assertNotEqual(self.timestamp.read_text(), "unchanged")
+        self.assertFalse(self.attachment.exists())  # Normal retention resumes only after activation.
 
 
 if __name__ == "__main__":
