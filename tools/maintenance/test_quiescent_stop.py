@@ -74,6 +74,21 @@ class StopTests(unittest.TestCase):
             self.assertEqual(self.cfg.read_bytes(), self.original)
             s.restore_configuration(self.root, self.state)
 
+    def test_explicit_maintenance_and_legacy_journals_restore_exact_bytes(self):
+        legacy = s.maintenance_config(self.original)
+        self.assertNotIn("maintenance", json.loads(legacy)["system"])
+        for version in (0, 1):
+            self.state.update(maintenance_version=version, token="version-" + str(version))
+            publication = s.publication(self.root, self.state)
+            publication.apply()
+            active = json.loads(self.cfg.read_bytes())["system"].get("maintenance", False)
+            self.assertIs(active, version == 1)
+            s.restore_configuration(self.root, self.state)
+            self.assertEqual(self.cfg.read_bytes(), self.original)
+        self.state["maintenance_version"] = 99
+        with self.assertRaises(ValueError):
+            s.publication(self.root, self.state)
+
     def test_reverse_file_publication_is_recoverable(self):
         for phase in [
             "candidate_file_ready",

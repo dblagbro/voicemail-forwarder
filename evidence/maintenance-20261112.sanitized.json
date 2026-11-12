@@ -1,0 +1,252 @@
+{
+  "checked_utc": "2026-11-12T22:02:38.787331+00:00",
+  "candidate": {
+    "started_utc": "2026-11-12T21:56:44.243859+00:00",
+    "production_modified": false,
+    "deployed": false,
+    "checks": {
+      "build": {
+        "exit": 0,
+        "sha256": "663f5dd5c0499d0c327138397b9e0c57bf67cb6346fd822066479c08de171f82"
+      },
+      "tests": {
+        "exit": 0,
+        "sha256": "655999c3b7a97484a693c50e9b651b41946a38048536363fe962ac89be38e225"
+      },
+      "runtime-dependencies": {
+        "exit": 0,
+        "sha256": "f0530c17bb4deca76cda5422545081c839be95524694b68456f2fdcb6018b2b9"
+      },
+      "scan": {
+        "exit": 0,
+        "sha256": "bb7f3fa605954e1b0de3ec96142bb6be13ecf7d0bef9e58722d0b80a8a6c4669"
+      }
+    },
+    "source_sha256": {
+      ".dockerignore": "975d46d2e30400deb1061eee48a149ec52343eab328889efa153f50152b956c6",
+      ".gitignore": "f2f8ace362729c40b46cca87e7af17e4d5aee7baad68594a68ef5f02706a64ae",
+      "Dockerfile": "260d538f2da2522049ee7dbc2865cff250407387c6625269c25db3366fc2ede3",
+      "LICENSE": "65300e2f4a6ec893d3f4218430db56f08457e6187257905e10acc0338bce69ed",
+      "README.md": "b853f21e1742b93593119d7afeceda39e3baab19c2d3ca32b3319017c837f7d0",
+      "SECURITY-MAINTENANCE.md": "1791052680c26fd0b3c5338f8c14862438b4f9104779708c3f3a294e33ab67e3",
+      "requirements.lock": "8c804089d21156ace63e116f33433d24bedf6d82d28cfaf178e1c91ecc6df43f",
+      "requirements.txt": "7e99a1b70e0ab7c43574be3f2ad0b5a64e410272246aac6091c81bf4f41fd013",
+      ".github/workflows/security-runtime.yml": "898947a36d41d82fbc5cf08ead6b1741cf65d23dabfe441e210d1e6b60247af2",
+      "app/__init__.py": "45a3603058b992b31c680ff2ac1fbba59d6b943ae295c60b60f0de00286e0eba",
+      "app/core.py": "7a1da83859315c8b83bc760f5545e66139a5af3e5b084871c91068a992a5448f",
+      "app/app.py": "654e15999e151ef6b7a63cbdf0745ce41ddce2a4c7a2124adf26898eb3ce2e74",
+      "app/static/style.css": "c9ce5d539349257fdd93385d03b6c2ccc6e4f89688f9406e899cf62e2d88bbcb",
+      "app/templates/attachments.html": "ef5a301e9945522003d0bc96cecb69e33a74bf8135a8bae0fd256dee4e192ea4",
+      "app/templates/index.html": "12ea3dc2f70dcf3d2a30911afc3743a604a978b74e4de6d57f37ec8276dfb265",
+      "app/templates/logs.html": "9dce86d8d7163783a969b9030b86efaad3fd877f38b62b4c8b61b7dc030b347f",
+      "app/templates/mailboxes.html": "927e7be4136cb57f305821268eadcea971e6333394d2e48a2fe3bc96f792224d",
+      "app/templates/settings.html": "a602da5de8c9132226f66ebf98ae9a8a192721789ca222bf2cb03f62e07b70cd",
+      "evidence/candidate-20261111.json": "46cc4840fa33cb8b6adebf26a4fd5260ce9e1beb51792581618d2faf92cf460e",
+      "tests/test_runtime.py": "bc762be1d408bf456878837be49a62a7e144d1be5c8fb3c79182c772dd43b05e",
+      "tools/verify_runtime.py": "212af40468a4f8a1358fcbc428e4e902ef52759c2c628ce52800aac6eda7d6f7",
+      "tools/maintenance/configuration_files.py": "0d6eb303e4f2252475d6a66968eee3960c705b380b691d57f8c8fce1e7fa7f97",
+      "tools/maintenance/cutover_files.py": "acc119a27aecc23280e264cd8b45862a7f2bb72961b1e88cc8bb5056701b2343",
+      "tools/maintenance/ingress_fence.py": "a5732dcc684c1df06544dbed6f085e2d23d0f9ca95735b6d059335e639d98c2a",
+      "tools/maintenance/launch_backup.py": "9ad83472ab469040ab3215b4b039f7700e711b2b7ba9b2a98b365abf711af686",
+      "tools/maintenance/poll_boundary.py": "2c0de2352d248a14551eb384108b8589b5e8d30d8d57575f8f2ccc1dc9350f96",
+      "tools/maintenance/quiesce_backup.py": "710f70e450dbf124d9446dc6a5db11b6ca87d51a3a3c4c180c5a1a4b320a13a8",
+      "tools/maintenance/rehearse_quiescence.py": "2bcce6af940adb01d407c9ca69613b8cd6cb2f97ffaffd8d7400fa1092aa5271",
+      "tools/maintenance/rehearse_stop.py": "e3b2b863a4b45df44790859f4c0801bbd2742c605bd883e1e5ca5216da040dd8",
+      "tools/maintenance/test_configuration_files.py": "4387228d94b74a9ebebeab17b4789e1d85cc2fc63834c59778b7d45f32011a6e",
+      "tools/maintenance/test_ingress_fence.py": "63a83431246395dd3d03a9684b58416f5f6c3bf2650ec8d3f399293614119412",
+      "tools/maintenance/test_poll_boundary.py": "be745086010604dabe07ab83c493c17c845ca2329cb3a8bbfcf76f658a0b6e06",
+      "tools/maintenance/test_quiesce_backup.py": "d025e59ceeaff54a5d8d2a5af301b35039dabfe2ec3f996d302bdaf9cbffc82e",
+      "tools/maintenance/verify_restore.py": "f3d8aa24ecce36ef472e44299846b664757bc2397e95be27b9a5ced73cbdbc31",
+      "tools/maintenance/test_ingress_activation.py": "7f9775d189c7b9a58af9342c02c221761ed0e11fda3b719849d3c84b1d37de3a",
+      "tools/maintenance/README.md": "d8058c5bf3cc967ca5c03cf10be2bc991252009056a77b0cd06e01a7efdafb57",
+      "tools/maintenance/quiescent_stop.py": "40b9da7412134968127765f3375b5fb13be29d0f2863abde4b58fd33191499ac",
+      "tools/maintenance/test_quiescent_stop.py": "1f3a1236bb090ba9bfb80cd34ee1399e1270183622f39cfcc6f562a39665cddc",
+      "tools/maintenance/rehearse_ingress_activation.py": "45a67feeb6b5138926a88f1939b0f0d789ce5615c9fa57f6781331ca5d3c8f56",
+      "tools/maintenance/evidence/freeze-rehearsal.sanitized.json": "b3314f1a4fe79a9b06559ea58f9ca9f1d48bf7b0c69592dd6b20d7fb896f29da",
+      "tools/maintenance/evidence/private-restore.sanitized.json": "8a8103dab0e731f7fb164cd216b4bb99893d8cc4bfea3b8ab2ece92d26888bda",
+      "tools/maintenance/evidence/production-backup.sanitized.json": "bd269ad6b837d830f456c162c70fce8e710506101b02303caefc8a2e68338239",
+      "tools/maintenance/evidence/stop-rehearsal-20261111.sanitized.json": "7094aeb85b66714ef316f9c740bc4a6b7ab1ab28a2c7f8d56b3079cb1cecadce",
+      "tools/maintenance/evidence/stop-source-tests-20261111.sanitized.json": "6ef9050b7f428cffe1fad20c5d699d62301877ae78d7dfa770050d61812882c6",
+      "tools/maintenance/evidence/ingress-activation-20261112.sanitized.json": "2e679278a2c87d5d02b6ea70241656ea7c521777ad9090fd0a7935a3aa220e5f",
+      "tools/maintenance/evidence/ingress-final-20261112.sanitized.json": "5eef8f653367c37d4b2624dc9615c1feee8ec3f72765f878019b81bc7505eb74"
+    },
+    "image_id": "sha256:4097750cea0470c0eb546badebbad66f48c6bf7dbb1de15e2a21843ecc4b390a",
+    "packages": {
+      "Flask": "3.1.3",
+      "blinker": "1.9.0",
+      "gunicorn": "27.0.0",
+      "Jinja2": "3.1.6",
+      "itsdangerous": "2.2.0",
+      "Werkzeug": "3.1.9",
+      "click": "8.5.1",
+      "MarkupSafe": "3.0.4"
+    },
+    "scan": {
+      "CRITICAL": 0,
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0,
+      "UNKNOWN": 0
+    },
+    "scan_findings": [],
+    "scan_sha256": "f5eb2845a7f2809e112169657feb46f9b6735680f44d660974c2249110d243f0",
+    "phase": "candidate_verified_not_deployed",
+    "updated_utc": "2026-11-12T21:57:29.561309+00:00"
+  },
+  "integrated_rehearsal": {
+    "checked_utc": "2026-11-12T22:00:45.053303+00:00",
+    "production_modified": false,
+    "deployed": false,
+    "synthetic_data_only": true,
+    "real_provider_acceptance": false,
+    "real_public_route_changed": false,
+    "proxy_image": "sha256:67a10554437ff2017327a3ebb36c8a779f38a7f67f861980109c1cd81e133c4a",
+    "original_image": "sha256:2642c1938ba2b5e7f6628105f452b294dc09b94efa9e7f79ed5069c0dca9453f",
+    "candidate_image": "sha256:4097750cea0470c0eb546badebbad66f48c6bf7dbb1de15e2a21843ecc4b390a",
+    "cases": [
+      {
+        "fault_stage": "none",
+        "fault_injection_recorded": false,
+        "original_resumed": true,
+        "original_configuration_restored": true,
+        "tls_authenticated_200": true,
+        "tls_unauthenticated_401": true,
+        "fresh_post_activation_data_preserved": true,
+        "candidate_id": "5db208842a8ed207933845a2519105fd2b324383c31a97587fb3a4845690320d",
+        "original_id": "1fe6c2c469df98bb907ce408e5ec86206dfca331f3e93e26cec53225924def53",
+        "firewall_fence_removed": true
+      },
+      {
+        "fault_stage": "ingress_fenced",
+        "fault_injection_recorded": true,
+        "original_resumed": true,
+        "original_configuration_restored": true,
+        "tls_authenticated_200": true,
+        "tls_unauthenticated_401": true,
+        "fresh_post_activation_data_preserved": false,
+        "candidate_id": null,
+        "original_id": "27d2cb6ed54a1b006d1492b01d43913331ebad5a6b4b91c0d60e564bf3a701ea",
+        "firewall_fence_removed": true
+      },
+      {
+        "fault_stage": "original_stopped",
+        "fault_injection_recorded": true,
+        "original_resumed": true,
+        "original_configuration_restored": true,
+        "tls_authenticated_200": true,
+        "tls_unauthenticated_401": true,
+        "fresh_post_activation_data_preserved": false,
+        "candidate_id": null,
+        "original_id": "cf3e696e8924abeb5c39293511120b43d22ed725ec5a8932a466e169f1f9105b",
+        "firewall_fence_removed": true
+      },
+      {
+        "fault_stage": "candidate_created",
+        "fault_injection_recorded": true,
+        "original_resumed": true,
+        "original_configuration_restored": true,
+        "tls_authenticated_200": true,
+        "tls_unauthenticated_401": true,
+        "fresh_post_activation_data_preserved": false,
+        "candidate_id": "d6e05689c1634d7bf2288b9b7e1a2f465e285eda75f80980c3d029e10d49dbbd",
+        "original_id": "4ca10ebf6e59394b002cd70ea143c1a8350943efb5d295ec00f2003a89a7e864",
+        "firewall_fence_removed": true
+      },
+      {
+        "fault_stage": "candidate_warm",
+        "fault_injection_recorded": true,
+        "original_resumed": true,
+        "original_configuration_restored": true,
+        "tls_authenticated_200": true,
+        "tls_unauthenticated_401": true,
+        "fresh_post_activation_data_preserved": false,
+        "candidate_id": "007d77ad8d99067d4cedcfc1de30af91d485c4d99d35adbd2d6e1a8e040165c2",
+        "original_id": "8d8fd0535c1de49771da88da55faa10cb71a114d166bd63106e84efac53ff4f5",
+        "firewall_fence_removed": true
+      },
+      {
+        "fault_stage": "configuration_activated",
+        "fault_injection_recorded": true,
+        "original_resumed": true,
+        "original_configuration_restored": true,
+        "tls_authenticated_200": true,
+        "tls_unauthenticated_401": true,
+        "fresh_post_activation_data_preserved": false,
+        "candidate_id": "845a97368f2f064814609aae5ef907b5f6db4925a70b5487a09ac3a1221821bd",
+        "original_id": "725c6c6e30d8d493aba6a470cfa763ff4dd496f6f419e1d25e7d9dee0fe539cb",
+        "firewall_fence_removed": true
+      },
+      {
+        "fault_stage": "candidate_active",
+        "fault_injection_recorded": true,
+        "original_resumed": true,
+        "original_configuration_restored": true,
+        "tls_authenticated_200": true,
+        "tls_unauthenticated_401": true,
+        "fresh_post_activation_data_preserved": false,
+        "candidate_id": "3ceec1be3814f670d05397f48169c0effabd977a66d455c82942bbc5dcfe26f9",
+        "original_id": "fb47e6129935f0d343329139f799fc546af6517987d91abc18139ed07d9233a7",
+        "firewall_fence_removed": true
+      },
+      {
+        "fault_stage": "fresh_data_committed",
+        "fault_injection_recorded": true,
+        "original_resumed": true,
+        "original_configuration_restored": true,
+        "tls_authenticated_200": true,
+        "tls_unauthenticated_401": true,
+        "fresh_post_activation_data_preserved": true,
+        "candidate_id": "5636e6a1a4e88a1953d5ea102f55fab45e2de7000666b0fe8e472f66b2de4896",
+        "original_id": "ffac0900ccee1fc22261a53ee9ac26032f74a9efe5d5711259eb0f1950a87942",
+        "firewall_fence_removed": true
+      }
+    ],
+    "new_owned_fixtures_removed": true,
+    "retained_backup_directories_removed": false,
+    "limitations": "Test-only host port and TLS proxy; not production operator, canonical Compose publication, live provider acceptance or reboot recovery."
+  },
+  "maintenance_tests_passed": 34,
+  "application_tests_passed": 24,
+  "regression_before": {
+    "tests_run": 24,
+    "failed_assertions": 12,
+    "errors": 6,
+    "note": "Old image fails new regressions; errors include missing maintenance API. Initial incomplete HTTP fixture was corrected before this final baseline."
+  },
+  "deployed": false,
+  "production_modified": false,
+  "production": {
+    "id": "8cdc6214d52531c12df025cfe189d525cf346cf0d31168c74aa94e7609943dfb",
+    "image": "sha256:2642c1938ba2b5e7f6628105f452b294dc09b94efa9e7f79ed5069c0dca9453f",
+    "started": "2026-11-07T00:36:37.381174249Z",
+    "configuration_sha256": "b9371774d04a755a6b72ab65d91a8f7db68481da98b474101618f14badc6665b",
+    "state": "running",
+    "restart": "unless-stopped"
+  },
+  "fixtures_remaining": 0,
+  "owned_fences_remaining": 0,
+  "running_campaign_units": [],
+  "shared_ownership_mode_acl_changed": false,
+  "retained_directories_removed": false,
+  "retention_review": {
+    "status": "retained_pending_individual_review",
+    "new_generations": [
+      "/mnt/s/backups/codex-security-20261109/voicemail-maintenance-build-20261112t2200",
+      "/mnt/s/backups/codex-security-20261109/voicemail-maintenance-ingress-20261112t2200",
+      "/var/backups/codex-remediation-20261109/workspace/voicemail-maintenance-runtime-20261112t2200"
+    ]
+  },
+  "source_sha256": {
+    "app/core.py": "7a1da83859315c8b83bc760f5545e66139a5af3e5b084871c91068a992a5448f",
+    "app/app.py": "654e15999e151ef6b7a63cbdf0745ce41ddce2a4c7a2124adf26898eb3ce2e74",
+    "tests/test_runtime.py": "bc762be1d408bf456878837be49a62a7e144d1be5c8fb3c79182c772dd43b05e",
+    "tools/maintenance/quiescent_stop.py": "40b9da7412134968127765f3375b5fb13be29d0f2863abde4b58fd33191499ac",
+    "tools/maintenance/test_quiescent_stop.py": "1f3a1236bb090ba9bfb80cd34ee1399e1270183622f39cfcc6f562a39665cddc",
+    "tools/maintenance/rehearse_ingress_activation.py": "45a67feeb6b5138926a88f1939b0f0d789ce5615c9fa57f6781331ca5d3c8f56"
+  },
+  "logs_sha256": {
+    "voicemail-maintenance-unit.log": "7ba020a7189a065c775a349e0dc0946a8b515542a7dff0bbf0dd848bbb5cfd89",
+    "voicemail-maintenance-before-final.log": "4342f74bd1b7822f23cf4e08d5a62401b7a761fadacb70558ec8b3149a9ae8c1",
+    "voicemail-maintenance-patched.log": "ea1162d970e0d678b1bb1d2db07da3d50f396a3e2242d4bd69afba7fb234d197"
+  }
+}

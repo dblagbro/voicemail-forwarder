@@ -103,6 +103,22 @@ def save_cfg(cfg):
         json.dump(cfg, f, indent=2)
 
 
+def maintenance_active(cfg=None):
+    """Fail closed while configuration is missing, malformed or fenced.
+
+    This gates new work, not an in-flight mail transaction. Operators must first
+    establish the existing idle boundary before publishing maintenance config.
+    Only an absent flag or the JSON boolean false enables normal operation.
+    """
+    try:
+        cfg = load_cfg() if cfg is None else cfg
+        if not isinstance(cfg, dict) or not isinstance(cfg.get("system", {}), dict):
+            return True
+        return cfg.get("system", {}).get("maintenance", False) is not False
+    except (OSError, ValueError, TypeError):
+        return True
+
+
 def log_line(line: str):
     os.makedirs(LOGS_DIR, exist_ok=True)
     ts = datetime.now().strftime("%F %T")
@@ -267,6 +283,8 @@ def prune_seen_uidl(mailbox_name: str, live_uidls) -> int:
 
 
 def smtp_send(cfg_smtp: dict, msg: EmailMessage):
+    if maintenance_active():
+        raise RuntimeError("Service is in maintenance mode")
     host = cfg_smtp.get("host") or ""
     port = int(cfg_smtp.get("port", 587))
     starttls = bool(cfg_smtp.get("starttls", True))
@@ -445,7 +463,12 @@ def delete_attachment(filename: str):
 
 def poll_once():
     ensure_initialized()
-    cfg = load_cfg()
+    try:
+        cfg = load_cfg()
+    except (OSError, ValueError, TypeError):
+        return
+    if maintenance_active(cfg):
+        return
     syscfg = cfg.get("system", {})
     smtp_cfg = syscfg.get("smtp", {})
     smtp_from = smtp_cfg.get("from") or smtp_cfg.get("user") or "noreply@example"
@@ -615,6 +638,8 @@ def poll_once():
 
 
 def manual_poll_now():
+    if maintenance_active():
+        return False
     try:
         log_line("INFO | manual_poll_requested")
         poll_once()
@@ -627,6 +652,12 @@ def manual_poll_now():
 
 def poll_loop():
     while not _poll_stop.is_set():
+        # A warm candidate must neither prune old attachments nor update poll
+        # health. Re-read promptly after the operator restores configuration;
+        # the temporary long poll interval must not delay activation for an hour.
+        if maintenance_active():
+            _poll_stop.wait(timeout=1)
+            continue
         start = time.time()
         log_line("INFO | poller_tick_start")
         with _poll_lock:
@@ -636,7 +667,14 @@ def poll_loop():
             except Exception as e:
                 log_line(f"ERROR | poll_once | err={e}\n{traceback.format_exc()}")
 
-        cfg2 = load_cfg()
+        try:
+            cfg2 = load_cfg()
+        except (OSError, ValueError, TypeError):
+            _poll_stop.wait(timeout=1)
+            continue
+        if maintenance_active(cfg2):
+            _poll_stop.wait(timeout=1)
+            continue
         syscfg2 = cfg2.get("system", {})
         smtp_cfg2 = syscfg2.get("smtp", {})
         alert_email = syscfg2.get("alert_email", "")
@@ -904,6 +942,9 @@ def pop3_test(mbox: dict, timeout: int = 15) -> dict:
         "ok": False, "stage": "config", "error": "", "steps": [],
         "messages": None, "bytes": None, "newest": None, "elapsed_ms": 0,
     }
+    if maintenance_active():
+        res.update(stage="maintenance", error="Service is in maintenance mode")
+        return res
 
     def step(label, ok, note=""):
         res["steps"].append({"label": label, "ok": bool(ok), "note": note})

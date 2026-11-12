@@ -1,5 +1,24 @@
 # Runtime reconciliation and security update
 
+Maintenance preparation, November 12: disabling mailboxes alone still permits
+attachment pruning, and the temporary 3600-second interval can delay polling after
+configuration restoration. The explicit `system.maintenance` gate prevents both
+warmup hazards. Tests cover expired attachments and poll timestamps, manual actions,
+provider tests, stall alerts, malformed configuration, and real Gunicorn activation
+within five seconds. The prior November 11 candidate below does not contain this
+application change. A newly built exact image needs its own tests and package scan;
+neither candidate is production-deployed by this source change.
+
+The November 12 maintenance candidate is
+`sha256:4097750cea0470c0eb546badebbad66f48c6bf7dbb1de15e2a21843ecc4b390a`.
+Its fresh scan completed at 21:57:29 UTC with zero matches at all severities.
+All 24 application tests and 34 maintenance tests pass. Eight integrated recovery
+cases, including seven actual controller SIGKILL interruptions, passed on this
+exact candidate; fresh deduplication and attachment records survived rollback.
+See `evidence/maintenance-20261112.sanitized.json`. Production remains unchanged.
+
+## Prior November 11 candidate
+
 Status: candidate verified; production has not been changed by this patch.
 
 Exact candidate: `sha256:efa8ab304beab278a16846840907f5774a8e3eff08ae97d034d23878cb67b08b`.

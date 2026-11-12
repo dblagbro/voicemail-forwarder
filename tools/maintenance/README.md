@@ -189,3 +189,21 @@ outside Git. This remains a rehearsal, not a production operator: fresh cutover
 backup/recovery, canonical Compose publication, real provider acceptance and
 reboot/power-loss recovery remain separate gates. An unchanged-image scan is
 not implied by these tests.
+
+## Explicit maintenance mode
+
+New integrated rehearsals record `maintenance_version: 1` in their stop journals.
+The corresponding temporary configuration includes `system.maintenance: true`.
+The updated application suppresses automatic/manual polls, stall alerts, POP3/SMTP
+tests, retention cleanup and HTTP mutations while this flag is active. GET readiness
+remains available. The poller checks once per second for configuration restoration,
+even when the temporary poll interval is 3600 seconds. Normal polling and retention
+resume on activation. Missing or malformed configuration, and a non-boolean flag,
+fail closed; omit the flag or use JSON `false` to resume.
+
+This flag gates new work; it does not drain an in-flight provider transaction.
+Keep the existing ingress fence and verified frozen idle boundary before publishing
+it. Older images ignore the flag and still need the legacy disabled-mailbox/SMTP
+configuration and idle stop. Journals without a version retain the exact legacy
+configuration bytes so interrupted older operations remain replayable. Unknown
+versions are rejected. Production rollout remains gated on the complete operator.
