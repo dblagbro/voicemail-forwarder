@@ -1,0 +1,112 @@
+{
+  "checked_utc": "2026-11-12T21:26:13.017512+00:00",
+  "production_modified": false,
+  "deployed": false,
+  "synthetic_data_only": true,
+  "real_provider_acceptance": false,
+  "real_public_route_changed": false,
+  "proxy_image": "sha256:67a10554437ff2017327a3ebb36c8a779f38a7f67f861980109c1cd81e133c4a",
+  "original_image": "sha256:2642c1938ba2b5e7f6628105f452b294dc09b94efa9e7f79ed5069c0dca9453f",
+  "candidate_image": "sha256:efa8ab304beab278a16846840907f5774a8e3eff08ae97d034d23878cb67b08b",
+  "cases": [
+    {
+      "fault_stage": "none",
+      "fault_injection_recorded": false,
+      "original_resumed": true,
+      "original_configuration_restored": true,
+      "tls_authenticated_200": true,
+      "tls_unauthenticated_401": true,
+      "fresh_post_activation_data_preserved": true,
+      "candidate_id": "c20baa5fcc4ebf1a262e3589a88201a0f709d7261123bf599bf17907b427bf76",
+      "original_id": "22e1288338dba2a7d9b357bd9cc474bf5c0ea9bd9edfae68863cec008a1c673f",
+      "firewall_fence_removed": true
+    },
+    {
+      "fault_stage": "ingress_fenced",
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_restored": true,
+      "tls_authenticated_200": true,
+      "tls_unauthenticated_401": true,
+      "fresh_post_activation_data_preserved": false,
+      "candidate_id": null,
+      "original_id": "526e2db9843cb4e7393d4f3879aefea355b785ac4c24c99f4499833b86f49fe8",
+      "firewall_fence_removed": true
+    },
+    {
+      "fault_stage": "original_stopped",
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_restored": true,
+      "tls_authenticated_200": true,
+      "tls_unauthenticated_401": true,
+      "fresh_post_activation_data_preserved": false,
+      "candidate_id": null,
+      "original_id": "22a1ee0424bc88dcd4b4d4ef52f83c54c9ce4313be3fe67ef5da1756e60e07ca",
+      "firewall_fence_removed": true
+    },
+    {
+      "fault_stage": "candidate_created",
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_restored": true,
+      "tls_authenticated_200": true,
+      "tls_unauthenticated_401": true,
+      "fresh_post_activation_data_preserved": false,
+      "candidate_id": "2a5ddd75ac8b50923692eadf4bd655bbfc998c4a4a864bc1497babc0567f1436",
+      "original_id": "f0db8d3326e6f317851e9950b5a1d642fea2f44c043e2cbe04c79749cd767522",
+      "firewall_fence_removed": true
+    },
+    {
+      "fault_stage": "candidate_warm",
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_restored": true,
+      "tls_authenticated_200": true,
+      "tls_unauthenticated_401": true,
+      "fresh_post_activation_data_preserved": false,
+      "candidate_id": "5df729517f4dd95f361032323b91aa458b4d437b4448c8217faa81cb97f77283",
+      "original_id": "2222cb0cb0d27877b01cc6951bc36bf1067518d3016ae050a99c2684ca36ccf1",
+      "firewall_fence_removed": true
+    },
+    {
+      "fault_stage": "configuration_activated",
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_restored": true,
+      "tls_authenticated_200": true,
+      "tls_unauthenticated_401": true,
+      "fresh_post_activation_data_preserved": false,
+      "candidate_id": "cd0a8787b453382a615907efe1a5b2b84f2202e5b39567fbdd8af85e014e998f",
+      "original_id": "f62ff5ef7701c8f3a68d4588eaf9d830173e8ee9feb32aa2d356f2907f07a806",
+      "firewall_fence_removed": true
+    },
+    {
+      "fault_stage": "candidate_active",
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_restored": true,
+      "tls_authenticated_200": true,
+      "tls_unauthenticated_401": true,
+      "fresh_post_activation_data_preserved": false,
+      "candidate_id": "e1c5a9964b5d5838236cccc6338ac1f9161cfd32570e95f7889a2433fa8cfffe",
+      "original_id": "046481ea4c349fbc245bde570c1401f19b758114c52e6fd6a1d0556c405d522f",
+      "firewall_fence_removed": true
+    },
+    {
+      "fault_stage": "fresh_data_committed",
+      "fault_injection_recorded": true,
+      "original_resumed": true,
+      "original_configuration_restored": true,
+      "tls_authenticated_200": true,
+      "tls_unauthenticated_401": true,
+      "fresh_post_activation_data_preserved": true,
+      "candidate_id": "5f276e29e779a1639da26d4fb787047cb7ff78c6c8aec129302f948932caabfd",
+      "original_id": "67e15fbfccd3836653b1ea2e4588d6fce379f6ec241e004f00c57cf67eaa8a0c",
+      "firewall_fence_removed": true
+    }
+  ],
+  "new_owned_fixtures_removed": true,
+  "retained_backup_directories_removed": false,
+  "limitations": "Test-only host port and TLS proxy; not production operator, canonical Compose publication, live provider acceptance or reboot recovery."
+}

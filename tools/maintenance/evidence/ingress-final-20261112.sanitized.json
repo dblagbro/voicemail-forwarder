@@ -1,0 +1,61 @@
+{
+  "checked_utc": "2026-11-12T21:27:54.991603+00:00",
+  "production": {
+    "id": "8cdc6214d52531c12df025cfe189d525cf346cf0d31168c74aa94e7609943dfb",
+    "image": "sha256:2642c1938ba2b5e7f6628105f452b294dc09b94efa9e7f79ed5069c0dca9453f",
+    "started": "2026-11-07T00:36:37.381174249Z",
+    "state": "running",
+    "configuration_sha256": "b9371774d04a755a6b72ab65d91a8f7db68481da98b474101618f14badc6665b",
+    "canonical_compose_sha256": "5b9517782ccbabaf7ccddbc721db7cf6e652df030bed65b12d7d3192603a159b",
+    "restart": "unless-stopped"
+  },
+  "production_identity_configuration_start_unchanged": true,
+  "fixtures_remaining": 0,
+  "owned_fences_remaining": 0,
+  "production_modified": false,
+  "new_image_scan": false,
+  "deployed": false,
+  "shared_ownership_mode_acl_changes": false,
+  "retained_directories_removed": false,
+  "failed_attempt": {
+    "generation": "/mnt/s/backups/codex-security-20261109/voicemail-ingress-20261112t0855",
+    "error": "NFS RENAME_NOREPLACE EINVAL",
+    "original_recovered": true,
+    "fixtures_removed": true,
+    "resolution": "Mutable synthetic runtime on same local filesystem as production; SAN evidence retained. Probe before container creation."
+  },
+  "retention_review": {
+    "status": "retained_pending_individual_review",
+    "new_generations": [
+      "/mnt/s/backups/codex-security-20261109/voicemail-ingress-20261112t0855",
+      "/mnt/s/backups/codex-security-20261109/voicemail-ingress-20261112t2119",
+      "/var/backups/codex-remediation-20261109/workspace/voicemail-runtime-20261112t2119",
+      "/mnt/s/backups/codex-security-20261109/voicemail-ingress-20261112t2126",
+      "/var/backups/codex-remediation-20261109/workspace/voicemail-runtime-20261112t2126"
+    ]
+  },
+  "source_sha256": {
+    "rehearse_ingress_activation.py": "793f9690c3051066f362779a7327e9a70be9fd81e390e55e2ba4e883516b9a79",
+    "test_ingress_activation.py": "7f9775d189c7b9a58af9342c02c221761ed0e11fda3b719849d3c84b1d37de3a"
+  },
+  "validation": {
+    "maintenance_tests_passed": 33,
+    "candidate_application_tests_passed": 15,
+    "final_source_rehearsal": "20261112t2126"
+  },
+  "concurrent_openbao": {
+    "image": "sha256:9089bc6d4aac6d69317f2faf7935135a6b48f949565b03c08677a7f15ff2454f",
+    "container_id": "99299f0276faccdf174d078a1c7122fc92f72d7644f258a51235d35a31888ee8",
+    "started": "2026-11-12T21:15:41.010599722Z",
+    "ports": {
+      "8200/tcp": null
+    },
+    "networks": [
+      "vault-testhub-internal"
+    ],
+    "direct_named_nginx_reference_found": false,
+    "nginx_port_8200_reference_found": false,
+    "changed_by_workgroup": false,
+    "limitation": "Bounded name/port check only; indirect upstream routing and complete external reachability unverified."
+  }
+}
